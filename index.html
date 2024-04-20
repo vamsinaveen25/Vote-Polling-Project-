@@ -165,11 +165,11 @@ p{
   document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    // Get input values
+ 
     var username = document.getElementById('loginUsername').value;
     var password = document.getElementById('loginPassword').value;
 
-    // Check if username and password are stored in local storage
+
     var storedUsers = JSON.parse(localStorage.getItem('users')) || [];
 
     var userFound = storedUsers.find(function(user) {
@@ -177,13 +177,13 @@ p{
     });
 
     if (userFound) {
-      // Login successful
+  
       document.getElementById('loginMessage').textContent = 'Login successful!';
       alert("login successfully");
-      // Redirect to another page
+     
       window.location.assign("polling new.html");
     } else {
-      // Login failed
+      
       document.getElementById('loginMessage').textContent = 'Invalid username or password';
       
       
@@ -197,21 +197,21 @@ p{
   document.getElementById('signupForm').addEventListener('submit' , function(event) {
     event.preventDefault();
 
-    // Get input values
+ 
     var firstName = document.getElementById('firstName').value;
     var lastName = document.getElementById('lastName').value;
-    // var dob = document.getElementById('dob').value;
+
     var email = document.getElementById('email').value;
     var password = document.getElementById('signupPassword').value;
     var rePassword = document.getElementById('rePassword').value;
 
-    // Check if passwords match
+
     if (password !== rePassword) {
       document.getElementById('signupMessage').textContent = 'Passwords do not match';
       return;
     }
 
-    // Store user in local storage
+
     var newUser = {
       username: email,
       password: password,
