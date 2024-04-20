@@ -185,7 +185,6 @@
       let pythonVotes = 0;
       let javascriptVotes = 0;
 
-      // Load votes from localStorage if available for poll 1
       if(localStorage.getItem('pollVotes1')) {
           const storedVotes1 = JSON.parse(localStorage.getItem('pollVotes1'));
           yesVotes1 = storedVotes1.yesVotes || 0;
@@ -193,7 +192,7 @@
           updateResults1();
       }
 
-      // Load votes from localStorage if available for poll 2
+    
       if(localStorage.getItem('pollVotes2')) {
           const storedVotes2 = JSON.parse(localStorage.getItem('pollVotes2'));
           javaVotes = storedVotes2.javaVotes || 0;
@@ -202,7 +201,7 @@
           updateResults2();
       }
 
-      // Poll 1 form submission
+  
       pollForm1.addEventListener("submit", function (e) {
           e.preventDefault();
           const formData = new FormData(pollForm1);
@@ -214,11 +213,11 @@
               noVotes1++;
           }
           updateResults1();
-          saveVotesLocally1(); // Save votes to local storage for poll 1
-          disableForm(pollForm1); // Disable the form after voting
+          saveVotesLocally1();
+          disableForm(pollForm1); 
       });
 
-      // Poll 2 form submission
+	  
       pollForm2.addEventListener("submit", function (e) {
           e.preventDefault();
           const formData = new FormData(pollForm2);
@@ -232,24 +231,24 @@
               javascriptVotes++;
           }
           updateResults2();
-          saveVotesLocally2(); // Save votes to local storage for poll 2
-          disableForm(pollForm2); // Disable the form after voting
+          saveVotesLocally2(); 
+          disableForm(pollForm2); 
       });
 
-      // Update results for poll 1
+ 
       function updateResults1() {
           yesCount1.textContent = yesVotes1;
           noCount1.textContent = noVotes1;
       }
 
-      // Update results for poll 2
+   
       function updateResults2() {
           javaCount.textContent = javaVotes;
           pythonCount.textContent = pythonVotes;
           javascriptCount.textContent = javascriptVotes;
       }
 
-      // Save votes to local storage for poll 1
+     
       function saveVotesLocally1() {
           const pollVotes1 = {
               yesVotes: yesVotes1,
@@ -258,7 +257,7 @@
           localStorage.setItem('pollVotes1', JSON.stringify(pollVotes1));
       }
 
-      // Save votes to local storage for poll 2
+   
       function saveVotesLocally2() {
           const pollVotes2 = {
               javaVotes: javaVotes,
@@ -268,7 +267,7 @@
           localStorage.setItem('pollVotes2', JSON.stringify(pollVotes2));
       }
 
-      // Disable form elements after voting
+ 
       function disableForm(form) {
           const radioButtons = form.querySelectorAll("input[type='radio']");
           const voteButton = form.querySelector(".vote-button");
