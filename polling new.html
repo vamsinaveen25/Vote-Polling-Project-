@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, 
+				initial-scale=1.0">
+	<title>User Polls</title>
+	<style>
+    body {
+	font-family: Arial, sans-serif;
+	background-color: #f0f0f0;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.container {
+	background: linear-gradient(to bottom, #0078d4, #0056b3);
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	color: #fff;
+	text-align: center;
+	padding: 30px;
+}
+
+.poll-question {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+.poll-form label {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 18px;
+	color: #fff;
+}
+
+.vote-button {
+	background-color: #0056b3;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 18px;
+	border-radius: 5px;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.vote-button:hover {
+	background-color: #0078d4;
+}
+
+.results {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.results-title {
+	font-size: 20px;
+}
+
+.results-count {
+	display: flex;
+	justify-content: space-between;
+	font-size: 18px;
+	margin-top: 10px;
+}
+
+.count {
+	font-weight: bold;
+}
+.next{
+  padding: 14px;
+  width: 5rem;
+  cursor: pointer;
+  border-radius: 3rem;
+
+}
+.next:hover{
+
+  background-color: green;
+}
+
+  </style>
+</head>
+
+<body>
+	
+<div class="container" id="poll1">
+  <h1 class="poll-question">
+      Do you like programming?
+  </h1>
+  <form id="poll-form" class="poll-form">
+      <label>
+          <input type="radio" name="vote" value="yes"> Yes
+      </label>
+      <label>
+          <input type="radio" name="vote" value="no"> No
+      </label>
+      <button type="submit" class="vote-button">
+          Vote
+      </button>
+  </form>
+  <div id="results" class="results">
+      <h2 class="results-title">
+          Results
+      </h2>
+      <div class="results-count">
+          <p>Yes:
+              <span id="yes-count" class="count">0</span>
+          </p>
+          <p>No:
+              <span id="no-count" class="count">0</span>
+          </p>
+      </div>
+  </div>
+  <button class="next" id="nextButton">Next</button>
+</div>
+
+<div class="container" id="poll2" style="display: none;">
+  <h1 class="poll-question">
+      What's your favorite programming language?
+  </h1>
+  <form id="poll-form-2" class="poll-form">
+      <label>
+          <input type="radio" name="vote" value="java"> Java
+      </label>
+      <label>
+          <input type="radio" name="vote" value="python"> Python
+      </label>
+      <label>
+          <input type="radio" name="vote" value="javascript"> JavaScript
+      </label>
+      <button type="submit" class="vote-button">
+          Vote
+      </button>
+  </form>
+  <div id="results-2" class="results">
+      <h2 class="results-title">
+          Results
+      </h2>
+      <div class="results-count">
+          <p>Java:
+              <span id="java-count" class="count">0</span>
+          </p>
+          <p>Python:
+              <span id="python-count" class="count">0</span>
+          </p>
+          <p>JavaScript:
+              <span id="javascript-count" class="count">0</span>
+          </p>
+      </div>
+  </div>
+</div>
+
+<script> 
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const pollForm1 = document.getElementById("poll-form");
+      const yesCount1 = document.getElementById("yes-count");
+      const noCount1 = document.getElementById("no-count");
+      const poll1 = document.getElementById("poll1");
+        const poll2 = document.getElementById("poll2");
+        const nextButton = document.getElementById("nextButton");
+      let yesVotes1 = 0;
+      let noVotes1 = 0;
+      nextButton.addEventListener("click", function() {
+            poll1.style.display = "none";
+            poll2.style.display = "block";
+        });
+      
+
+      const pollForm2 = document.getElementById("poll-form-2");
+      const javaCount = document.getElementById("java-count");
+      const pythonCount = document.getElementById("python-count");
+      const javascriptCount = document.getElementById("javascript-count");
+      let javaVotes = 0;
+      let pythonVotes = 0;
+      let javascriptVotes = 0;
+
+      // Load votes from localStorage if available for poll 1
+      if(localStorage.getItem('pollVotes1')) {
+          const storedVotes1 = JSON.parse(localStorage.getItem('pollVotes1'));
+          yesVotes1 = storedVotes1.yesVotes || 0;
+          noVotes1 = storedVotes1.noVotes || 0;
+          updateResults1();
+      }
+
+      // Load votes from localStorage if available for poll 2
+      if(localStorage.getItem('pollVotes2')) {
+          const storedVotes2 = JSON.parse(localStorage.getItem('pollVotes2'));
+          javaVotes = storedVotes2.javaVotes || 0;
+          pythonVotes = storedVotes2.pythonVotes || 0;
+          javascriptVotes = storedVotes2.javascriptVotes || 0;
+          updateResults2();
+      }
+
+      // Poll 1 form submission
+      pollForm1.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(pollForm1);
+          const userVote = formData.get("vote");
+
+          if (userVote === "yes") {
+              yesVotes1++;
+          } else if (userVote === "no") {
+              noVotes1++;
+          }
+          updateResults1();
+          saveVotesLocally1(); // Save votes to local storage for poll 1
+          disableForm(pollForm1); // Disable the form after voting
+      });
+
+      // Poll 2 form submission
+      pollForm2.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(pollForm2);
+          const userVote = formData.get("vote");
+
+          if (userVote === "java") {
+              javaVotes++;
+          } else if (userVote === "python") {
+              pythonVotes++;
+          } else if (userVote === "javascript") {
+              javascriptVotes++;
+          }
+          updateResults2();
+          saveVotesLocally2(); // Save votes to local storage for poll 2
+          disableForm(pollForm2); // Disable the form after voting
+      });
+
+      // Update results for poll 1
+      function updateResults1() {
+          yesCount1.textContent = yesVotes1;
+          noCount1.textContent = noVotes1;
+      }
+
+      // Update results for poll 2
+      function updateResults2() {
+          javaCount.textContent = javaVotes;
+          pythonCount.textContent = pythonVotes;
+          javascriptCount.textContent = javascriptVotes;
+      }
+
+      // Save votes to local storage for poll 1
+      function saveVotesLocally1() {
+          const pollVotes1 = {
+              yesVotes: yesVotes1,
+              noVotes: noVotes1
+          };
+          localStorage.setItem('pollVotes1', JSON.stringify(pollVotes1));
+      }
+
+      // Save votes to local storage for poll 2
+      function saveVotesLocally2() {
+          const pollVotes2 = {
+              javaVotes: javaVotes,
+              pythonVotes: pythonVotes,
+              javascriptVotes: javascriptVotes
+          };
+          localStorage.setItem('pollVotes2', JSON.stringify(pollVotes2));
+      }
+
+      // Disable form elements after voting
+      function disableForm(form) {
+          const radioButtons = form.querySelectorAll("input[type='radio']");
+          const voteButton = form.querySelector(".vote-button");
+
+          radioButtons.forEach(function (radioButton) {
+              radioButton.disabled = true;
+          });
+          voteButton.disabled = true;
+      }
+  });
+</script>
+
+
+
+</body>
+
+</html>
+   
